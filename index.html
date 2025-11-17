@@ -399,12 +399,12 @@
       overflow: auto;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center; /* Changed from flex-start to center */
     }
-
     .chart-window-content img {
-      max-width: 100%;
-      height: auto;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
       border-radius: 0.25rem;
     }
 
