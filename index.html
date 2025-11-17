@@ -1,499 +1,1264 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Flight Planner & ATC Assistant</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            display: flex;
-        }
-
-        .container {
-            width: 70%;
-            padding: 20px;
-            background: #fff;
-        }
-          .settings-sidebar {
-            width: 30%;
-            padding: 20px;
-            background-color: #f0f0f0;
-            border-left: 1px solid #ccc;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-        }
-        h1, h2 {
-            color: #0056b3;
-        }
-
-        .form-section, .notes-section, .cheat-sheet-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-        }
-
-        label {
-            display: inline-block;
-            width: 150px;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"], select, textarea {
-            width: calc(100% - 170px);
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        textarea {
-            height: 150px;
-        }
-
-        button {
-             background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        button:hover {
-             background-color: #0056b3;
-        }
-
-        .cheat-sheet-section {
-            margin-top: 20px;
-             background-color: #eef;
-            padding: 15px;
-        }
-
-        #cheatSheet {
-            font-size: 1.1em;
-             white-space: pre-line;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #fff;
-            line-height: 1.6;
-            padding: 15px;
-        }
-
-        .notes-info {
-           font-size: 0.9em;
-           color: #777;
-           margin-bottom: 10px;
-        }
-
-          /* Chart Styles */
-        .charts-section {
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-             margin-top: auto;
-        }
-
-        .charts-section h3 {
-            margin-bottom: 10px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .charts-section.collapsed .charts-content {
-            display: none;
-        }
-
-         .charts-content {
-          display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-             overflow: hidden;
-        }
-
-        .chart-item {
-           display: flex;
-          flex-direction: column;
-        }
-
-        .chart-thumbnail {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-         .chart-item input {
-            width: calc(100% - 10px);
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 0.8em;
-             margin-bottom: 5px;
-
-        }
-        .chart-item > div {
-            display: flex;
-           align-items: center;
-        }
-        .remove-button {
-             background-color: #f44336;
-            color: white;
-            border: none;
-             padding: 5px 8px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 12px;
-            cursor: pointer;
-            border-radius: 4px;
-            margin-left: 10px;
-        }
-
-        /* Floating window styles */
-       .chart-window {
-            position: fixed;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 1000;
-            overflow: hidden;
-             display: none;
-            resize: both;
-            overflow: auto;
-        }
-        .chart-window.minimized {
-         height: auto;
-         width: auto;
-         padding: 5px;
-         overflow: visible;
-        }
-         .chart-window.open {
-             display: block;
-         }
-
-        .chart-window-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 5px;
-        }
-
-        .close-button {
-             background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 5px 8px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 12px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        .minimize-button {
-             background-color: #333;
-            color: white;
-            border: none;
-            padding: 5px 8px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 12px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        .chart-image {
-            max-width: 100%;
-            max-height: 100%;
-             display: block;
-             cursor: move;
-        }
-          .minimized-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        display: flex;
-        gap: 5px;
-        padding: 5px;
-        background-color: #f0f0f0;
-        border-top: 1px solid #ccc;
-       z-index: 999;
-        }
-    .minimized-item {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    border-radius: 4px;
+  <meta charset="UTF-8" />
+  <title>PTFS ATC Helper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #101010;
+      --surface: #181818;
+      --surface-soft: #202020;
+      --primary: #3b82f6;
+      --primary-soft: #1f2937;
+      --accent: #38bdf8;
+      --text: #e5e5e5;
+      --muted: #888;
+      --border: #2a2a2a;
+      --danger: #ef4444;
+      --active: #2563eb;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     }
-    </style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(360px, 420px);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    main {
+      padding: 1.5rem 1.75rem;
+      overflow-y: auto;
+    }
+
+    aside {
+      padding: 1.5rem;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    .section {
+      background: transparent;
+      border-radius: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border-radius: 0.35rem;
+      border: 1px solid var(--border);
+      background: var(--primary-soft);
+      color: var(--text);
+      padding: 0.45rem 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 0.75rem;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .button-row {
+      margin-top: 0.4rem;
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    button {
+      border-radius: 0.35rem;
+      border: none;
+      font-size: 0.8rem;
+      padding: 0.45rem 0.7rem;
+      cursor: pointer;
+      background: var(--primary);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    button.small {
+      padding: 0.3rem 0.45rem;
+      font-size: 0.75rem;
+    }
+
+    button.ghost {
+      background: var(--primary-soft);
+    }
+
+    button.danger {
+      background: var(--danger);
+    }
+
+    button.icon {
+      width: 28px;
+      padding: 0.3rem;
+      background: var(--primary-soft);
+    }
+
+    button:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Save bar */
+    .save-bar {
+      background: var(--surface-soft);
+      border-radius: 0.4rem;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.45rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .save-bar select {
+      min-width: 80px;
+    }
+
+    .save-bar input {
+      max-width: 110px;
+    }
+
+    /* Notes helper */
+    .notes-helper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .notes-helper button {
+      background: var(--primary-soft);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .notes-helper button[title] {
+      cursor: help;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Autocomplete dropdown */
+    .autocomplete {
+      position: relative;
+    }
+
+    .autocomplete-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.35rem;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      box-shadow: var(--shadow);
+    }
+
+    .autocomplete-option {
+      padding: 0.4rem 0.5rem;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    .autocomplete-option:last-child {
+      border-bottom: none;
+    }
+
+    .autocomplete-option:hover,
+    .autocomplete-option.highlighted {
+      background: var(--primary-soft);
+    }
+
+    /* Cheat sheet */
+    .cs-section {
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      margin-bottom: 0.45rem;
+      overflow: hidden;
+    }
+
+    .cs-header {
+      padding: 0.45rem 0.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .cs-header span {
+      font-weight: 500;
+    }
+
+    .cs-header .stage-btn {
+      background: var(--primary-soft);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .cs-section.active .cs-header {
+      background: var(--active);
+    }
+
+    .cs-body {
+      padding: 0.45rem 0.6rem 0.55rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .cs-body pre {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      line-height: 1.4;
+      position: relative;
+    }
+
+    .cs-body .copy-btn {
+      position: absolute;
+      right: 0;
+      top: -1.3rem;
+    }
+
+    .value {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Charts */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 0.4rem;
+    }
+
+    .chart-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+    }
+
+    .chart-thumb {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 0.35rem;
+      border: 1px solid var(--border);
+      object-fit: cover;
+      cursor: pointer;
+      background: #111;
+    }
+
+    .chart-row {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+
+    .chart-row input {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.3rem;
+    }
+
+    /* Floating chart window */
+    .floating-chart-window {
+      position: fixed;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      box-shadow: var(--shadow);
+      z-index: 9999;
+      display: none;
+      min-width: 300px;
+      min-height: 200px;
+      resize: both;
+      overflow: hidden;
+    }
+
+    .floating-chart-window.open {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-window-header {
+      padding: 0.5rem;
+      background: var(--surface-soft);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: move;
+      user-select: none;
+      min-height: 40px;
+    }
+
+    .chart-title {
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .window-controls button {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      font-size: 0.9rem;
+      border-radius: 0.25rem;
+    }
+
+    .chart-window-content {
+      flex: 1;
+      padding: 0.5rem;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .chart-window-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.25rem;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        height: auto;
+      }
+
+      main,
+      aside {
+        height: auto;
+        max-height: none;
+      }
+    }
+  </style>
 </head>
 <body>
-     <div class="container">
-            <h1>Flight Planner</h1>
-            <div class="cheat-sheet-section">
-            <h2>Cheat Sheet</h2>
-            <div id="cheatSheet"></div>
-            </div>
+  <main>
+    <h1>PTFS Flight / ATC Cheat Sheet</h1>
+    <div id="cheatSheet"></div>
+  </main>
 
-         </div>
-    <div class="settings-sidebar">
-        <h2>Settings</h2>
-        <div class="form-section">
-             <h2>Flight Plan</h2>
-            <form id="flightPlanForm">
-                <label for="callsign">Callsign:</label>
-                <input type="text" id="callsign" required><br><br>
-
-                <label for="aircraft">Aircraft:</label>
-                <input type="text" id="aircraft" required><br><br>
-
-                <label for="ifrVfr">IFR/VFR:</label>
-                <select id="ifrVfr">
-                    <option value="IFR">IFR</option>
-                    <option value="VFR">VFR</option>
-                </select><br><br>
-
-                <label for="departure">Departure:</label>
-                <input type="text" id="departure" required><br><br>
-
-                <label for="arrival">Arrival:</label>
-                <input type="text" id="arrival" required><br><br>
-
-                 <label for="route">Route:</label>
-                <textarea id="route">GPS Direct</textarea><br><br>
-
-                <label for="fl">Flight Level:</label>
-                <input type="text" id="fl" required><br><br>
-
-                <label for="squawk">Squawk Code:</label>
-                <input type="text" id="squawk" required><br><br>
-                <button type="button" onclick="generateCheatSheet()">Generate Cheat Sheet</button>
-                 <button type="button" onclick="copyFlightPlan()">Copy Flight Plan</button>
-
-            </form>
-        </div>
-
-        <div class="notes-section">
-            <h2>Structured Notes</h2>
-            <p class="notes-info">
-                Use the following format for notes:<br>
-                <code>DepRunway = [runway]<br>
-                ArRunway = [runway]<br>
-                DepTaxi = [taxi instructions]<br>
-                ArTaxi = [taxi instructions]<br>
-                Heading = [heading]<br>
-                Altitude = [altitude]<br>
-                Wind = [wind info]<br>
-                DepMin = [minutes]<br>
-                DepMinHead = [heading]<br>
-                 DepGate = [gate number]<br>
-                  ArGate = [gate number]</code><br>
-
-            </p>
-             <textarea id="structuredNotes" placeholder="Enter your notes here"></textarea>
-           </div>
-
-         <div class="notes-section">
-            <h2>General Notes</h2>
-            <textarea id="generalNotes" placeholder="Type any important notes here"></textarea>
-           </div>
-            <div class="charts-section" id="chartsSection">
-                 <div style="display: flex; justify-content: space-between; align-items: center">
-                 <h3 onclick="toggleCharts()">Charts</h3>
-                    <button  onclick="addChart()">Add Chart</button>
-                     </div>
-                <div class="charts-content" id="chartsContent">
-                    <!-- Chart Thumbnails -->
-                     <div class="chart-item">
-                        <img src="https://placekitten.com/100/100" class="chart-thumbnail" data-src="https://placekitten.com/800/600" alt="Chart 1" />
-                           <div>
-                        <input type="text" value="Chart 1" data-src="https://placekitten.com/800/600">
-                          <button class="remove-button" onclick="removeChart(this)">Remove</button>
-                           </div>
-                        <input type="url" placeholder="Chart Image URL"  value="https://placekitten.com/800/600">
-                     </div>
-                     <div class="chart-item">
-                       <img src="https://placekitten.com/100/101" class="chart-thumbnail" data-src="https://placekitten.com/801/601" alt="Chart 2" />
-                      <div>
-                       <input type="text" value="Chart 2" data-src="https://placekitten.com/801/601">
-                         <button class="remove-button" onclick="removeChart(this)">Remove</button>
-                          </div>
-                         <input type="url" placeholder="Chart Image URL"  value="https://placekitten.com/801/601">
-                     </div>
-                       <div class="chart-item">
-                        <img src="https://placekitten.com/100/102" class="chart-thumbnail" data-src="https://placekitten.com/802/602" alt="Chart 3" />
-                       <div>
-                        <input type="text" value="Chart 3" data-src="https://placekitten.com/802/602">
-                            <button class="remove-button" onclick="removeChart(this)">Remove</button>
-                             </div>
-                         <input type="url" placeholder="Chart Image URL" value="https://placekitten.com/802/602">
-                       </div>
-                        <div class="chart-item">
-                        <img src="https://placekitten.com/100/103" class="chart-thumbnail" data-src="https://placekitten.com/803/603" alt="Chart 4" />
-                       <div>
-                        <input type="text" value="Chart 4" data-src="https://placekitten.com/803/603">
-                          <button class="remove-button" onclick="removeChart(this)">Remove</button>
-                           </div>
-                       <input type="url" placeholder="Chart Image URL" value="https://placekitten.com/803/603">
-                        </div>
-                </div>
-            </div>
-        </div>
-        <div class="minimized-bar" id="minimizedBar">
-        </div>
-    <!-- Floating windows for charts -->
-    <div class="chart-window" id="chartWindow">
-            <div class="chart-window-header">
-              <span id="chartWindowTitle"></span>
-              <div>
-                 <button class="minimize-button" onclick="minimizeChart(this)">-</button>
-                 <button class="close-button" onclick="closeChart()">X</button>
-                 </div>
-            </div>
-            <img src="" alt="Chart" class="chart-image" id="chartImage"/>
-
+  <aside>
+    <!-- Compact save bar -->
+    <div class="save-bar" id="saveBar">
+      <span>Plans</span>
+      <select id="plansSelect" style="display: none;"></select>
+      <input
+        type="text"
+        id="planName"
+        placeholder="Name"
+        title="Name for the current plan"
+      />
+      <button id="savePlan" class="small ghost" title="Save / overwrite plan">
+        Save
+      </button>
+      <button id="deletePlan" class="small danger" title="Delete selected plan">
+        Del
+      </button>
     </div>
 
-    <script>
+    <div class="section">
+      <div class="section-header">
+        <h2>Flight Plan</h2>
+      </div>
+      <div class="grid-2" id="flightPlanForm">
+        <div class="field-group">
+          <label for="callsign">Callsign</label>
+          <input id="callsign" type="text" />
+        </div>
+        <div class="field-group">
+          <label for="aircraft">Aircraft</label>
+          <input id="aircraft" type="text" />
+        </div>
+        <div class="field-group">
+          <label for="ifrVfr">Rules</label>
+          <select id="ifrVfr">
+            <option value="IFR">IFR</option>
+            <option value="VFR">VFR</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="fl">Flight Level</label>
+          <input id="fl" type="text" placeholder="e.g. 250" />
+        </div>
+        <div class="field-group">
+          <label for="departure">Departure</label>
+          <input id="departure" type="text" />
+        </div>
+        <div class="field-group">
+          <label for="arrival">Arrival</label>
+          <input id="arrival" type="text" />
+        </div>
+        <div class="field-group">
+          <label for="squawk">Squawk</label>
+          <input id="squawk" type="text" placeholder="e.g. 1234" />
+        </div>
+        <div class="field-group" style="grid-column: 1 / -1">
+          <label for="route">Route</label>
+          <textarea id="route">GPS Direct</textarea>
+        </div>
+      </div>
+      <div class="button-row">
+        <button id="copyPlan" class="ghost small">
+          Copy plan summary
+        </button>
+      </div>
+    </div>
 
-    document.addEventListener('DOMContentLoaded', () => {
-         loadState();
-       });
+    <div class="section">
+      <div class="section-header">
+        <h2>Structured Notes</h2>
+      </div>
+      <div class="muted">
+        Format: <b>Key = Value</b>. Quick keys below (hover for meaning).
+      </div>
+      <div class="notes-helper" id="notesHelper"></div>
+      <div class="autocomplete">
+        <textarea
+          id="structuredNotes"
+          placeholder="DepRunway = 27L&#10;ArRunway = 28R&#10;..."
+        ></textarea>
+        <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+      </div>
+    </div>
 
-        function generateCheatSheet() {
-            const callsign = document.getElementById('callsign').value;
-            const aircraft = document.getElementById('aircraft').value;
-            const ifrVfr = document.getElementById('ifrVfr').value;
-            const departure = document.getElementById('departure').value;
-            const arrival = document.getElementById('arrival').value;
-             const route = document.getElementById('route').value;
-            const fl = document.getElementById('fl').value;
-            const squawk = document.getElementById('squawk').value;
+    <div class="section">
+      <div class="section-header">
+        <h2>General Notes</h2>
+      </div>
+      <textarea
+        id="generalNotes"
+        placeholder="Frequencies, flows, extra reminders..."
+      ></textarea>
+    </div>
 
-            const structuredNotes = document.getElementById('structuredNotes').value;
-             const generalNotes = document.getElementById('generalNotes').value;
+    <div class="section">
+      <div class="section-header">
+        <h2>Charts</h2>
+        <button id="addChart" class="icon" title="Add chart">+</button>
+      </div>
+      <div id="charts" class="charts-grid"></div>
+    </div>
+  </aside>
 
-           const parsedNotes = parseStructuredNotes(structuredNotes);
-              const getNoteValue = (key, defaultValue) => {
-                 return parsedNotes[key] !== undefined ? parsedNotes[key] : defaultValue;
-            };
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const el = (id) => document.getElementById(id);
 
-            const cheatSheetContent = `
-            **Flight Plan:**
+      const cheatSheetEl = el("cheatSheet");
 
-            Callsign: ${callsign}
-            Aircraft: ${aircraft}
-            IFR/VFR: ${ifrVfr}
-            Departure: ${departure}
-            Arrival: ${arrival}
-            Route: ${route}
-            Flight Level: ${fl}
-            Squawk Code: ${squawk}
+      const fields = {
+        callsign: el("callsign"),
+        aircraft: el("aircraft"),
+        ifrVfr: el("ifrVfr"),
+        departure: el("departure"),
+        arrival: el("arrival"),
+        route: el("route"),
+        fl: el("fl"),
+        squawk: el("squawk"),
+        structuredNotes: el("structuredNotes"),
+        generalNotes: el("generalNotes"),
+      };
 
-            **ATC Communications Example:**
+      const plansSelect = el("plansSelect");
+      const planNameInput = el("planName");
+      const chartsContainer = el("charts");
 
-            **_BEFORE STARTING TO FLY:_**
-            - Read information ATIS in #atis-information-1
-            - File a flight plan in #flight-plans:
-               Callsign: ${callsign}
-               Aircraft: ${aircraft}
-               IFR/VFR: ${ifrVfr}
-               Departure: ${departure}
-               Arrival: ${arrival}
-               Route: ${route}
-               FL: ${fl}
-               Sqk: ${squawk}
-            - Open ${departure}, ${arrival}, airport charts
-            - IFR is flying to another airport and VFR is flying to the same
-            place you departed
+      // Structured notes helper (with tooltips)
+      const noteKeys = [
+        { key: "DepRunway", hint: "Departure runway (e.g. 27L)" },
+        { key: "ArRunway", hint: "Arrival runway (e.g. 28R)" },
+        { key: "DepTaxi", hint: "Departure taxi route" },
+        { key: "ArTaxi", hint: "Arrival taxi route / gate taxi" },
+        { key: "Heading", hint: "Assigned heading after departure" },
+        { key: "Altitude", hint: "Initial climb altitude" },
+        { key: "Wind", hint: "Wind readout for takeoff/landing" },
+        { key: "DepMin", hint: "Minutes after departure for climb change" },
+        { key: "DepMinHead", hint: "Heading after DepMin minutes" },
+        { key: "DepGate", hint: "Departure gate/stand" },
+        { key: "ArGate", hint: "Arrival gate/stand" },
+      ];
 
-            **_CONTACT ${departure} VC_**
-            - Pilot: ${departure} Delivery, ${callsign}, radio check.
-            - ATC: ${callsign}, radio check 5/5
-            - Pilot: ${callsign}, requesting IFR Clearance to ${arrival} with information (current info letter).
-            - ATC: ${callsign}, cleared IFR to ${arrival} via ${route}. Expect runway ${getNoteValue('DepRunway','[runway]')} for departure. Climb and maintain ${getNoteValue('Altitude','[altitude]')} feet, expect flight level ${fl}, ${getNoteValue('DepMin','[minutes]')} after departure, heading ${getNoteValue('DepMinHead','[heading]')}. Departure is with me, Squawk ${squawk}.
-            - Pilot: Cleared IFR to ${arrival} via ${route}. Expect runway ${getNoteValue('DepRunway','[runway]')} for departure. Climb and maintain ${getNoteValue('Altitude','[altitude]')} feet, expect flight level ${fl}, ${getNoteValue('DepMin','[minutes]')} after departure, heading ${getNoteValue('DepMinHead','[heading]')}. Departures is with you, Squawk ${squawk}, ${callsign}.
-           _EDIT FLIGHT PLAN AND PUT CORRECT SQUAWK CODE_
+      const notesHelper = el("notesHelper");
+      noteKeys.forEach(({ key, hint }) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "small ghost";
+        b.textContent = key;
+        b.title = hint;
+        b.addEventListener("click", () => {
+          const t = fields.structuredNotes;
+          const prefix =
+            t.value.trim() === "" || t.value.endsWith("\n") ? "" : "\n";
+          t.value += prefix + key + " = ";
+          t.focus();
+          generateCheatSheet();
+          saveCurrentState();
+        });
+        notesHelper.appendChild(b);
+      });
 
-            **_CHANGE VC TO ${departure} GROUND_**
-             - Pilot: Ground, ${callsign}, ready for push and start from Gate ${getNoteValue('DepGate','[gate number]')}.
-            - ATC: ${callsign}, ${departure} Ground, Gate ${getNoteValue('DepGate','[gate number]')} push and start approved face [direction].
-            - Pilot: Push and start approved, face [direction], ${callsign}.
-            _PUSHBACK AND FACE THE INSTRUCTED DIRECTION_
-            - Pilot: ${callsign}, ready for taxi to Runway ${getNoteValue('DepRunway','[runway]')}.
-            - ATC: ${callsign}, taxi to holding point [number], Runway ${getNoteValue('DepRunway','[runway]')} via ${getNoteValue('DepTaxi','[taxi instructions]')}.
-            - Pilot: Taxi to holding point [number], Runway ${getNoteValue('DepRunway','[runway]')} via ${getNoteValue('DepTaxi','[taxi instructions]')}, ${callsign}.
-            _TAXI TO RUNWAY VIA TAXI INSTRUCTIONS AND HOLD SHORT AT HOLDING POINT_
+      // Autocomplete for structured notes
+      const autocompleteDropdown = el("autocompleteDropdown");
+      let selectedAutocompleteIndex = -1;
 
-           *at holding point*
-            - Pilot: ${callsign}, holding short of Runway ${getNoteValue('DepRunway','[runway]')} at [holding point].
-            - ATC: ${callsign}, runway ${getNoteValue('DepRunway','[runway]')}, cleared for takeoff, ${getNoteValue('Wind','[wind info]')}, fly runway heading.
-           - Pilot: Cleared for takeoff runway ${getNoteValue('DepRunway','[runway]')}, fly runway heading, ${callsign}.
-           _TAKEOFF RUNWAY_
-            - ATC: ${callsign}, Chicago Center, radar contact established. Climb flight level ${fl}.
-           - Pilot: Climb flight level ${fl}, ${callsign}.
-            _ATC WILL GUIDE YOU ALL THE WAY TO APPROACH_
-            - ATC: ${callsign}, contact ${arrival} Centre on [frequency].
-            - Pilot: Contact ${arrival} Centre on [frequency], ${callsign}.
-            _CHANGE VC TO ${arrival}_
-            - Pilot: ${arrival} Centre, ${callsign}, with you at ${getNoteValue('Altitude','[altitude]')}, heading ${getNoteValue('Heading','[heading]')}.
-            _FOLLOW ATC INSTRUCTIONS_
+      function setupAutocomplete() {
+        fields.structuredNotes.addEventListener("input", (e) => {
+          const cursorPos = fields.structuredNotes.selectionStart;
+          const text = fields.structuredNotes.value.substring(0, cursorPos);
+          const lines = text.split("\n");
+          const currentLine = lines[lines.length - 1];
+          
+          // Check if we're typing a key (before the '=' sign)
+          const keyMatch = currentLine.match(/^(\w+)$/);
+          if (keyMatch && !currentLine.includes("=")) {
+            const partialKey = keyMatch[1];
+            const matches = noteKeys
+              .filter(({ key }) => key.toLowerCase().startsWith(partialKey.toLowerCase()))
+              .map(({ key }) => key);
+            
+            if (matches.length > 0) {
+              showAutocomplete(matches);
+              return;
+            }
+          }
+          hideAutocomplete();
+        });
 
-            *at final approach near Runway*
-            - Pilot: ${callsign}, five mile final Runway ${getNoteValue('ArRunway','[runway]')}.
-           - ATC: ${callsign}, Runway ${getNoteValue('ArRunway','[runway]')} clear to land, ${getNoteValue('Wind','[wind info]')}
-           - Pilot: Cleared to land Runway ${getNoteValue('ArRunway','[runway]')}, ${callsign}.
-            *landed*
-             - ATC: ${callsign}, welcome to ${arrival}, vacate right/left when able.
-            - Pilot: Right/Left when able, ${callsign}.
-           _TURN LEFT/RIGHT TO EXIT RUNWAY WHEN ABLE_
-          - Pilot: ${callsign}, ready to taxi.
-          - ATC: ${callsign}, taxi to ${getNoteValue('ArTaxi','[taxi instructions]')}.
-           - Pilot: Taxi to ${getNoteValue('ArTaxi','[taxi instructions]')}, ${callsign}.
-           _TAXI USING INSTRUCTIONS_
-            - Pilot: ${callsign}, holding point [holding point].
-          - ATC: ${callsign}, cleared to cross Runway ${getNoteValue('ArRunway','[runway]')}, taxi to Gate ${getNoteValue('ArGate','[gate number]')} via ${getNoteValue('ArTaxi','[taxi instructions]')}.
-          - Pilot: Cleared to cross Runway ${getNoteValue('ArRunway','[runway]')}, taxi to Gate ${getNoteValue('ArGate','[gate number]')} via ${getNoteValue('ArTaxi','[taxi instructions]')}, ${callsign}.
+        fields.structuredNotes.addEventListener("keydown", (e) => {
+          const options = autocompleteDropdown.querySelectorAll(".autocomplete-option");
+          if (options.length === 0) return;
+          
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, options.length - 1);
+            updateAutocompleteHighlight();
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, -1);
+            updateAutocompleteHighlight();
+          } else if (e.key === "Enter" || e.key === "Tab") {
+            if (selectedAutocompleteIndex >= 0) {
+              e.preventDefault();
+              selectAutocompleteOption(options[selectedAutocompleteIndex].textContent);
+            }
+          } else if (e.key === "Escape") {
+            hideAutocomplete();
+          }
+        });
 
-            **Key Frequencies and Info**
-            _Check ATIS before flight_
-            _Record all ATC Frequecies in notes_
-            **Departure VC:** _See Notes_
-            **Arrival VC:** _See Notes_
-             **General Notes:**
-            ${generalNotes}
-              `;
+        // Hide dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+          if (!e.target.closest(".autocomplete")) {
+            hideAutocomplete();
+          }
+        });
+      }
 
-            document.getElementById('cheatSheet').textContent = cheatSheetContent;
-            saveState();
+      function showAutocomplete(matches) {
+        autocompleteDropdown.innerHTML = "";
+        selectedAutocompleteIndex = -1;
+        
+        matches.forEach((key, index) => {
+          const option = document.createElement("div");
+          option.className = "autocomplete-option";
+          option.textContent = key;
+          option.addEventListener("click", () => selectAutocompleteOption(key));
+          autocompleteDropdown.appendChild(option);
+          
+          // Also add the "= " version
+          const optionWithEquals = document.createElement("div");
+          optionWithEquals.className = "autocomplete-option";
+          optionWithEquals.textContent = key + " = ";
+          optionWithEquals.addEventListener("click", () => selectAutocompleteOption(key + " = "));
+          autocompleteDropdown.appendChild(optionWithEquals);
+        });
+        
+        autocompleteDropdown.style.display = "block";
+      }
+
+      function hideAutocomplete() {
+        autocompleteDropdown.style.display = "none";
+        selectedAutocompleteIndex = -1;
+      }
+
+      function updateAutocompleteHighlight() {
+        const options = autocompleteDropdown.querySelectorAll(".autocomplete-option");
+        options.forEach((opt, idx) => {
+          opt.classList.toggle("highlighted", idx === selectedAutocompleteIndex);
+        });
+      }
+
+      function selectAutocompleteOption(text) {
+        const cursorPos = fields.structuredNotes.selectionStart;
+        const textBefore = fields.structuredNotes.value.substring(0, cursorPos);
+        const textAfter = fields.structuredNotes.value.substring(cursorPos);
+        const lines = textBefore.split("\n");
+        const currentLine = lines[lines.length - 1];
+        const lineStart = textBefore.lastIndexOf("\n") + 1;
+        
+        // Replace the current word with the selected option
+        const newLine = currentLine.replace(/^\w+/, text);
+        const newText = textBefore.substring(0, lineStart) + newLine + textAfter;
+        
+        fields.structuredNotes.value = newText;
+        
+        // Position cursor after the selected text
+        const newCursorPos = lineStart + newLine.length;
+        fields.structuredNotes.setSelectionRange(newCursorPos, newCursorPos);
+        
+        hideAutocomplete();
+        generateCheatSheet();
+        saveCurrentState();
+      }
+
+      // Floating chart window
+      let floatingWindow = null;
+      let chartCounter = 0;
+
+      function createFloatingWindow() {
+        const window = document.createElement("div");
+        window.className = "floating-chart-window";
+        window.innerHTML = `
+          <div class="chart-window-header">
+            <span class="chart-title">Chart</span>
+            <div class="window-controls">
+              <button class="window-btn" data-action="minimize">−</button>
+              <button class="window-btn" data-action="close">×</button>
+            </div>
+          </div>
+          <div class="chart-window-content">
+            <img src="" alt="Chart" class="chart-image">
+          </div>
+        `;
+        document.body.appendChild(window);
+        
+        // Make draggable
+        const header = window.querySelector(".chart-window-header");
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
+
+        header.addEventListener("mousedown", (e) => {
+          isDragging = true;
+          dragOffset = {
+            x: e.clientX - window.offsetLeft,
+            y: e.clientY - window.offsetTop
+          };
+          document.addEventListener("mousemove", dragWindow);
+          document.addEventListener("mouseup", stopDrag);
+        });
+
+        function dragWindow(e) {
+          if (isDragging) {
+            window.style.left = (e.clientX - dragOffset.x) + "px";
+            window.style.top = (e.clientY - dragOffset.y) + "px";
+          }
         }
-         function copyFlightPlan() {
-        const callsign = document.getElementById('callsign').value;
-        const aircraft = document.getElementById('aircraft').value;
-        const ifrVfr = document.getElementById('ifrVfr').value;
-        const departure = document.getElementById('departure').value;
-        const arrival = document.getElementById('arrival').value;
-        const route = document.getElementById('route').value;
-        const fl = document.getElementById('fl').value;
-        const squawk = document.getElementById('squawk').value;
-           const flightPlanText = `Callsign: ${callsign}\nAircraft: ${aircraft}\nIFR/VFR: ${ifrVfr}\nDeparture: ${departure}\nArrival: ${arrival}\nRoute: ${route}\nFlight Level: ${fl}\nSquawk Code: ${squawk}`;
 
-           navigator.clipboard.writeText(flightPlanText)
-              
+        function stopDrag() {
+          isDragging = false;
+          document.removeEventListener("mousemove", dragWindow);
+          document.removeEventListener("mouseup", stopDrag);
+        }
+
+        // Window controls
+        window.addEventListener("click", (e) => {
+          if (e.target.dataset.action === "close") {
+            window.classList.remove("open");
+            window.style.display = "none";
+          } else if (e.target.dataset.action === "minimize") {
+            const content = window.querySelector(".chart-window-content");
+            const isMinimized = content.style.display === "none";
+            content.style.display = isMinimized ? "block" : "none";
+          }
+        });
+
+        return window;
+      }
+
+      function openChartWindow(name, src) {
+        if (!floatingWindow) {
+          floatingWindow = createFloatingWindow();
+        }
+
+        floatingWindow.querySelector(".chart-title").textContent = name || "Chart";
+        floatingWindow.querySelector(".chart-image").src = src;
+        
+        // Position randomly but within viewport
+        const x = Math.random() * (window.innerWidth - 400) + 50;
+        const y = Math.random() * (window.innerHeight - 300) + 50;
+        
+        floatingWindow.style.left = x + "px";
+        floatingWindow.style.top = y + "px";
+        floatingWindow.style.display = "block";
+        floatingWindow.classList.add("open");
+      }
+
+      // Helpers
+      const parseStructuredNotes = (text) => {
+        const obj = {};
+        text.split("\n").forEach((line) => {
+          const parts = line.split("=");
+          if (parts.length === 2) {
+            const k = parts[0].trim();
+            const v = parts[1].trim();
+            if (k) obj[k] = v;
+          }
+        });
+        return obj;
+      };
+
+      const spanVal = (value, fallback) => {
+        const v = value && value.trim() !== "" ? value.trim() : fallback;
+        if (value && value.trim() !== "") {
+          return `<span class="value">${v}</span>`;
+        }
+        return v;
+      };
+
+      // Cheat sheet generation
+      function generateCheatSheet() {
+        const plan = {
+          callsign: fields.callsign.value,
+          aircraft: fields.aircraft.value,
+          ifrVfr: fields.ifrVfr.value,
+          departure: fields.departure.value,
+          arrival: fields.arrival.value,
+          route: fields.route.value,
+          fl: fields.fl.value,
+          squawk: fields.squawk.value,
+        };
+
+        const notes = parseStructuredNotes(fields.structuredNotes.value);
+
+        const gp = (k, fb) => spanVal(plan[k], fb);
+        const gn = (k, fb) => spanVal(notes[k], fb);
+
+        const sections = [
+          {
+            title: "Flight Plan Summary",
+            content: `Callsign: ${gp("callsign", "[Callsign]")}
+Aircraft: ${gp("aircraft", "[Aircraft]")}
+Rules: ${plan.ifrVfr}
+Departure: ${gp("departure", "[Dep]")}
+Arrival: ${gp("arrival", "[Arr]")}
+Route: ${gp("route", "GPS Direct")}
+Flight Level: ${gp("fl", "[FL]")}
+Squawk: ${gp("squawk", "[Squawk]")}`,
+          },
+          {
+            title: "Pre-Flight",
+            content: `1. Check ATIS at ${gp("departure", "[Dep]")}.
+2. File flight plan in Discord (or system).
+3. Open departure + arrival charts.
+4. Brief the route: ${gp("route", "GPS Direct")}.`,
+          },
+          {
+            title: `IFR Clearance (${plan.departure || "Departure"})`,
+            content: `Pilot: ${gp(
+              "departure",
+              "[Dep]"
+            )} Delivery, ${gp("callsign", "[Callsign]")}, radio check.
+ATC: ${gp("callsign", "[Callsign]")}, roger, read you 5 by 5.
+Pilot: ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, request IFR clearance to ${gp("arrival", "[Arr]")} with information [ATIS letter].
+ATC: ${gp("callsign", "[Callsign]")}, cleared IFR to ${gp(
+              "arrival",
+              "[Arr]"
+            )} via ${gp(
+              "route",
+              "route"
+            )}. Expect runway ${gn("DepRunway", "[Rwy]")} for departure.
+Climb and maintain ${gn(
+              "Altitude",
+              "[Altitude]"
+            )}, expect FL${gp("fl", "[FL]")}, ${gn(
+              "DepMin",
+              "[X]"
+            )} minutes after departure, heading ${gn("DepMinHead", "[Hdg]")}.
+Departure is with me, Squawk ${gp("squawk", "[Sqk]")}.
+Pilot: (Readback) Cleared IFR to ${gp(
+              "arrival",
+              "[Arr]"
+            )} via ${gp(
+              "route",
+              "route"
+            )}. Expect runway ${gn("DepRunway", "[Rwy]")}, climb ${gn(
+              "Altitude",
+              "[Altitude]"
+            )}, expect FL${gp(
+              "fl",
+              "[FL]"
+            )}, ${gn("DepMin", "[X]")} mins after departure, heading ${gn(
+              "DepMinHead",
+              "[Hdg]"
+            )}. Squawk ${gp("squawk", "[Sqk]")}, ${gp(
+              "callsign",
+              "[Callsign]"
+            )}.`,
+          },
+          {
+            title: `Ground / Taxi (${plan.departure || "Departure"})`,
+            content: `Pilot: ${gp(
+              "departure",
+              "[Dep]"
+            )} Ground, ${gp(
+              "callsign",
+              "[Callsign]"
+            )} at Gate ${gn("DepGate", "[Gate]")}, ready for push and start.
+ATC: ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, push and start approved, face [direction].
+Pilot: Push and start approved, face [direction], ${gp(
+              "callsign",
+              "[Callsign]"
+            )}.
+
+Pilot: ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, ready to taxi.
+ATC: ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, taxi to holding point [ID], Runway ${gn(
+              "DepRunway",
+              "[Rwy]"
+            )} via ${gn("DepTaxi", "[Taxi route]")}.
+Pilot: Taxi to holding point [ID], Runway ${gn(
+              "DepRunway",
+              "[Rwy]"
+            )} via ${gn("DepTaxi", "[Taxi route]")}, ${gp(
+              "callsign",
+              "[Callsign]"
+            )}.`,
+          },
+          {
+            title: "Takeoff & Departure",
+            content: `Pilot: ${gp(
+              "departure",
+              "[Dep]"
+            )} Tower, ${gp("callsign", "[Callsign]")}, holding short Runway ${gn(
+              "DepRunway",
+              "[Rwy]"
+            )}.
+ATC: ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, Runway ${gn(
+              "DepRunway",
+              "[Rwy]"
+            )} cleared for takeoff, wind ${gn("Wind", "[Wind]")}. Fly runway heading.
+Pilot: Cleared for takeoff Runway ${gn(
+              "DepRunway",
+              "[Rwy]"
+            )}, runway heading, ${gp("callsign", "[Callsign]")}.`,
+          },
+          {
+            title: `Approach & Landing (${plan.arrival || "Arrival"})`,
+            content: `Pilot: ${gp(
+              "arrival",
+              "[Arr]"
+            )} Tower, ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, on final for Runway ${gn("ArRunway", "[Rwy]")}.
+ATC: ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, Runway ${gn(
+              "ArRunway",
+              "[Rwy]"
+            )} cleared to land, wind ${gn("Wind", "[Wind]")}.
+Pilot: Cleared to land Runway ${gn(
+              "ArRunway",
+              "[Rwy]"
+            )}, ${gp("callsign", "[Callsign]")}.`,
+          },
+          {
+            title: "After Landing / Taxi in",
+            content: `ATC: ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, vacate when able and contact Ground on [frequency].
+Pilot: Vacate when able, contact Ground, ${gp(
+              "callsign",
+              "[Callsign]"
+            )}.
+
+Pilot: ${gp(
+              "arrival",
+              "[Arr]"
+            )} Ground, ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, clear of Runway ${gn(
+              "ArRunway",
+              "[Rwy]"
+            )}, ready taxi to gate.
+ATC: ${gp(
+              "callsign",
+              "[Callsign]"
+            )}, taxi to Gate ${gn("ArGate", "[Gate]")} via ${gn(
+              "ArTaxi",
+              "[Taxi route]"
+            )}.
+Pilot: Taxi to Gate ${gn(
+              "ArGate",
+              "[Gate]"
+            )} via ${gn("ArTaxi", "[Taxi route]")}, ${gp(
+              "callsign",
+              "[Callsign]"
+            )}.`,
+          },
+          {
+            title: "General Notes",
+            content:
+              fields.generalNotes.value.trim() || "No additional notes.",
+          },
+        ];
+
+        cheatSheetEl.innerHTML = "";
+        sections.forEach((sec, idx) => {
+          const wrap = document.createElement("div");
+          wrap.className = "cs-section";
+          if (idx === 0) wrap.classList.add("active");
+
+          const header = document.createElement("div");
+          header.className = "cs-header";
+          header.innerHTML = `<span>${sec.title}</span>`;
+          const stageBtn = document.createElement("button");
+          stageBtn.type = "button";
+          stageBtn.className = "stage-btn";
+          stageBtn.textContent = "Set active";
+          header.appendChild(stageBtn);
+
+          const body = document.createElement("div");
+          body.className = "cs-body";
+          const pre = document.createElement("pre");
+          pre.innerHTML = `${sec.content}`;
+          const copy = document.createElement("button");
+          copy.type = "button";
+          copy.className = "small ghost copy-btn";
+          copy.textContent = "Copy";
+          body.appendChild(copy);
+          body.appendChild(pre);
+
+          wrap.appendChild(header);
+          wrap.appendChild(body);
+          cheatSheetEl.appendChild(wrap);
+        });
+      }
+
+      // Charts
+      function addChart(name = "", url = "") {
+        const item = document.createElement("div");
+        item.className = "chart-item";
+        item.innerHTML = `
+          <img class="chart-thumb" src="${
+            url || "https://via.placeholder.com/200x200/111111/444444?text=Chart"
+          }" alt="chart" />
+          <div class="chart-row">
+            <input class="chart-name" type="text" placeholder="Name" value="${name}" />
+            <button type="button" class="icon small danger remove-chart">&times;</button>
+          </div>
+          <input class="chart-url" type="text" placeholder="Image URL" value="${url}" />
+        `;
+        chartsContainer.appendChild(item);
+      }
+
+      chartsContainer.addEventListener("input", (e) => {
+        const item = e.target.closest(".chart-item");
+        if (!item) return;
+        const img = item.querySelector(".chart-thumb");
+        const nameInput = item.querySelector(".chart-name");
+        const urlInput = item.querySelector(".chart-url");
+        if (e.target === urlInput) {
+          img.src =
+            urlInput.value.trim() ||
+            "https://via.placeholder.com/200x200/111111/444444?text=Chart";
+        }
+        img.alt = nameInput.value || "chart";
+        saveCurrentState();
+      });
+
+      chartsContainer.addEventListener("click", (e) => {
+        const item = e.target.closest(".chart-item");
+        if (!item) return;
+        if (e.target.classList.contains("remove-chart")) {
+          item.remove();
+          saveCurrentState();
+        } else if (e.target.classList.contains("chart-thumb")) {
+          const name = item.querySelector(".chart-name").value || "Chart";
+          const url = item.querySelector(".chart-url").value.trim();
+          if (url) {
+            openChartWindow(name, url);
+          }
+        }
+      });
+
+      el("addChart").addEventListener("click", () => {
+        addChart();
+        saveCurrentState();
+      });
+
+      // Plans (save/load)
+      function getPlans() {
+        try {
+          return JSON.parse(localStorage.getItem("ptfsPlans") || "[]");
+        } catch {
+          return [];
+        }
+      }
+
+      function setPlans(plans) {
+        localStorage.setItem("ptfsPlans", JSON.stringify(plans));
+      }
+
+      function refreshPlansSelect() {
+        const plans = getPlans();
+        if (plans.length === 0) {
+          plansSelect.style.display = "none";
+          return;
+        }
+        
+        plansSelect.style.display = "inline-block";
+        plansSelect.innerHTML = "";
+        plans.forEach((p) => {
+          const o = document.createElement("option");
+          o.value = p.name;
+          o.textContent = p.name;
+          plansSelect.appendChild(o);
+        });
+      }
+
+      function getCurrentState() {
+        const state = {
+          form: {},
+          notes: fields.structuredNotes.value,
+          general: fields.generalNotes.value,
+          charts: [],
+        };
+        Object.keys(fields).forEach((k) => {
+          if (k !== "structuredNotes" && k !== "generalNotes") {
+            state.form[k] = fields[k].value;
+          }
+        });
+        chartsContainer.querySelectorAll(".chart-item").forEach((item) => {
+          state.charts.push({
+            name: item.querySelector(".chart-name").value,
+            url: item.querySelector(".chart-url").value,
+          });
+        });
+        return state;
+      }
+
+      function loadState(state) {
+        if (!state) return;
+        Object.entries(state.form || {}).forEach(([k, v]) => {
+          if (fields[k]) fields[k].value = v;
+        });
+        fields.structuredNotes.value = state.notes || "";
+        fields.generalNotes.value = state.general || "";
+        chartsContainer.innerHTML = "";
+        (state.charts || []).forEach((c) => addChart(c.name, c.url));
+        generateCheatSheet();
+      }
+
+      function saveCurrentState() {
+        localStorage.setItem(
+          "ptfsCurrent",
+          JSON.stringify(getCurrentState())
+        );
+      }
+
+      function loadCurrentState() {
+        try {
+          const raw = localStorage.getItem("ptfsCurrent");
+          if (raw) loadState(JSON.parse(raw));
+          else generateCheatSheet();
+        } catch {
+          generateCheatSheet();
+        }
+      }
+
+      el("savePlan").addEventListener("click", () => {
+        const name = planNameInput.value.trim();
+        if (!name) {
+          alert("Give the plan a name.");
+          return;
+        }
+        const plans = getPlans();
+        const existing = plans.findIndex((p) => p.name === name);
+        const newData = { name, data: getCurrentState() };
+        if (existing >= 0) plans[existing] = newData;
+        else plans.push(newData);
+        setPlans(plans);
+        refreshPlansSelect();
+        plansSelect.value = name;
+      });
+
+      el("deletePlan").addEventListener("click", () => {
+        const name = plansSelect.value;
+        if (!name) return;
+        if (!confirm(`Delete plan "${name}"?`)) return;
+        let plans = getPlans();
+        plans = plans.filter((p) => p.name !== name);
+        setPlans(plans);
+        refreshPlansSelect();
+        if (plans.length === 0) {
+          plansSelect.style.display = "none";
+        }
+      });
+
+      plansSelect.addEventListener("change", () => {
+        const name = plansSelect.value;
+        const plans = getPlans();
+        const p = plans.find((x) => x.name === name);
+        if (p) {
+          loadState(p.data);
+          planNameInput.value = name;
+        }
+      });
+
+      // Copy buttons / active stage
+      cheatSheetEl.addEventListener("click", (e) => {
+        if (e.target.classList.contains("copy-btn")) {
+          const pre = e.target.nextElementSibling;
+          const tmp = pre.innerText;
+          navigator.clipboard.writeText(tmp);
+        }
+        if (e.target.classList.contains("stage-btn")) {
+          const section = e.target.closest(".cs-section");
+          document
+            .querySelectorAll(".cs-section.active")
+            .forEach((s) => s.classList.remove("active"));
+          section.classList.add("active");
+        }
+      });
+
+      el("copyPlan").addEventListener("click", () => {
+        const firstSection = cheatSheetEl.querySelector(".cs-body pre");
+        if (firstSection) {
+          navigator.clipboard.writeText(firstSection.innerText);
+        }
+      });
+
+      // Live updates
+      const allInputs = document.querySelectorAll(
+        "#flightPlanForm input, #flightPlanForm select, #flightPlanForm textarea, #structuredNotes, #generalNotes"
+      );
+      allInputs.forEach((i) => {
+        i.addEventListener("input", () => {
+          generateCheatSheet();
+          saveCurrentState();
+        });
+      });
+
+      // Init
+      setupAutocomplete();
+      refreshPlansSelect();
+      loadCurrentState();
+      
+      if (!chartsContainer.children.length) {
+        addChart("Dep example", "https://placekitten.com/800/600");
+        addChart("Arr example", "https://placekitten.com/801/601");
+      }
+    });
+  </script>
+</body>
+</html>
